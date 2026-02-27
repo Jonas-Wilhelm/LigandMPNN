@@ -24,7 +24,7 @@ from ligandmpnn.data_utils import (
 )
 from ligandmpnn.model_utils import ProteinMPNN
 from ligandmpnn.sc_utils import Packer, pack_side_chains
-from ligandmpnn._paths import default_checkpoint
+from ligandmpnn._paths import default_checkpoint, validate_checkpoint
 import time
 
 
@@ -85,6 +85,7 @@ class MPNNRunner(object):
         if verbose:
             print(f"Using device: {self.device}")
 
+        validate_checkpoint(self.__checkpoint_path)
         checkpoint = torch.load(self.__checkpoint_path, map_location=self.device)
 
 
@@ -138,7 +139,8 @@ class MPNNRunner(object):
                             device=self.device,
                             num_mix=3)
             if pack_sc_checkpoint_path is None:
-                pack_sc_checkpoint_path = "/projects/ml/struc2seq/ligandMPNN_models/b_v1/s_300756.pt"
+                pack_sc_checkpoint_path = default_checkpoint("ligandmpnn_sc_v_32_002_16.pt")
+            validate_checkpoint(pack_sc_checkpoint_path)
             self.checkpoint_sc = torch.load(pack_sc_checkpoint_path, map_location=self.device)
             self.model_sc.load_state_dict(self.checkpoint_sc['model_state_dict'])
             self.model_sc.to(self.device)

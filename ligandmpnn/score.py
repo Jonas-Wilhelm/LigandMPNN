@@ -15,7 +15,7 @@ from ligandmpnn.data_utils import (
     parse_PDB,
 )
 from ligandmpnn.model_utils import ProteinMPNN
-from ligandmpnn._paths import default_checkpoint
+from ligandmpnn._paths import default_checkpoint, validate_checkpoint
 
 
 def main(args) -> None:
@@ -50,6 +50,7 @@ def main(args) -> None:
     else:
         print("Choose one of the available models")
         sys.exit()
+    validate_checkpoint(checkpoint_path)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     if args.model_type == "ligand_mpnn":
         atom_context_num = checkpoint["atom_context_num"]

@@ -14,3 +14,12 @@ def get_model_params_dir() -> str:
 def default_checkpoint(filename: str) -> str:
     """Return the absolute path to a checkpoint file in model_params/."""
     return os.path.join(_MODEL_PARAMS_DIR, filename)
+
+
+def validate_checkpoint(path: str) -> None:
+    """Check that a checkpoint file exists; exit with a helpful message if not."""
+    if not os.path.isfile(path):
+        msg = f"Checkpoint not found: {path}"
+        if path.startswith(_MODEL_PARAMS_DIR):
+            msg += "\nRun 'ligandmpnn-fetch-weights --all' to download model weights."
+        raise SystemExit(msg)

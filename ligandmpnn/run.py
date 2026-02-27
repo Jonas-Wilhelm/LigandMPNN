@@ -22,7 +22,7 @@ from ligandmpnn.data_utils import (
 from ligandmpnn.model_utils import ProteinMPNN
 from prody import writePDB
 from ligandmpnn.sc_utils import Packer, pack_side_chains
-from ligandmpnn._paths import default_checkpoint
+from ligandmpnn._paths import default_checkpoint, validate_checkpoint
 
 
 def main(args) -> None:
@@ -67,6 +67,7 @@ def main(args) -> None:
     else:
         print("Choose one of the available models")
         sys.exit()
+    validate_checkpoint(checkpoint_path)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     if args.model_type == "ligand_mpnn":
         atom_context_num = checkpoint["atom_context_num"]
@@ -115,6 +116,7 @@ def main(args) -> None:
             num_mix=3,
         )
 
+        validate_checkpoint(args.checkpoint_path_sc)
         checkpoint_sc = torch.load(args.checkpoint_path_sc, map_location=device)
         model_sc.load_state_dict(checkpoint_sc["model_state_dict"])
         model_sc.to(device)
