@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Model weights (downloaded via ligandmpnn-fetch-weights)
+ligandmpnn/model_params/

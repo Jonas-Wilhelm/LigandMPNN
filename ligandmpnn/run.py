@@ -7,7 +7,7 @@ import sys
 
 import numpy as np
 import torch
-from data_utils import (
+from ligandmpnn.data_utils import (
     alphabet,
     element_dict_rev,
     featurize,
@@ -19,9 +19,10 @@ from data_utils import (
     restype_str_to_int,
     write_full_PDB,
 )
-from model_utils import ProteinMPNN
+from ligandmpnn.model_utils import ProteinMPNN
 from prody import writePDB
-from sc_utils import Packer, pack_side_chains
+from ligandmpnn.sc_utils import Packer, pack_side_chains
+from ligandmpnn._paths import default_checkpoint
 
 
 def main(args) -> None:
@@ -36,6 +37,8 @@ def main(args) -> None:
     random.seed(seed)
     np.random.seed(seed)
     device = torch.device("cuda" if (torch.cuda.is_available()) else "cpu")
+    if args.verbose:
+        print(f"Using device: {device}")
     folder_for_outputs = args.out_folder
     base_folder = folder_for_outputs
     if base_folder[-1] != "/":
@@ -674,7 +677,7 @@ def main(args) -> None:
                         )
 
 
-if __name__ == "__main__":
+def main_cli():
     argparser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
@@ -693,31 +696,31 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--checkpoint_protein_mpnn",
         type=str,
-        default="./model_params/proteinmpnn_v_48_020.pt",
+        default=default_checkpoint("proteinmpnn_v_48_020.pt"),
         help="Path to model weights.",
     )
     argparser.add_argument(
         "--checkpoint_ligand_mpnn",
         type=str,
-        default="./model_params/ligandmpnn_v_32_010_25.pt",
+        default=default_checkpoint("ligandmpnn_v_32_010_25.pt"),
         help="Path to model weights.",
     )
     argparser.add_argument(
         "--checkpoint_per_residue_label_membrane_mpnn",
         type=str,
-        default="./model_params/per_residue_label_membrane_mpnn_v_48_020.pt",
+        default=default_checkpoint("per_residue_label_membrane_mpnn_v_48_020.pt"),
         help="Path to model weights.",
     )
     argparser.add_argument(
         "--checkpoint_global_label_membrane_mpnn",
         type=str,
-        default="./model_params/global_label_membrane_mpnn_v_48_020.pt",
+        default=default_checkpoint("global_label_membrane_mpnn_v_48_020.pt"),
         help="Path to model weights.",
     )
     argparser.add_argument(
         "--checkpoint_soluble_mpnn",
         type=str,
-        default="./model_params/solublempnn_v_48_020.pt",
+        default=default_checkpoint("solublempnn_v_48_020.pt"),
         help="Path to model weights.",
     )
 
@@ -933,7 +936,7 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--checkpoint_path_sc",
         type=str,
-        default="./model_params/ligandmpnn_sc_v_32_002_16.pt",
+        default=default_checkpoint("ligandmpnn_sc_v_32_002_16.pt"),
         help="Path to model weights.",
     )
 
@@ -988,3 +991,7 @@ if __name__ == "__main__":
 
     args = argparser.parse_args()
     main(args)
+
+
+if __name__ == "__main__":
+    main_cli()

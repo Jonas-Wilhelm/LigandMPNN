@@ -20,10 +20,10 @@ from typing import Mapping, Optional, Sequence, Any
 
 import numpy as np
 
-from openfold.data import templates, parsers, mmcif_parsing
-from openfold.data.tools import jackhmmer, hhblits, hhsearch
-from openfold.data.tools.utils import to_date 
-from openfold.np import residue_constants, protein
+from ligandmpnn.openfold.data import templates, parsers, mmcif_parsing
+from ligandmpnn.openfold.data.tools import jackhmmer, hhblits, hhsearch
+from ligandmpnn.openfold.data.tools.utils import to_date 
+from ligandmpnn.openfold.np import residue_constants, protein
 
 
 FeatureDict = Mapping[str, np.ndarray]

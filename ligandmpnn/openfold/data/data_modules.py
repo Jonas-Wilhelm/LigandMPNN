@@ -12,13 +12,13 @@ import pytorch_lightning as pl
 import torch
 from torch.utils.data import RandomSampler
 
-from openfold.data import (
+from ligandmpnn.openfold.data import (
     data_pipeline,
     feature_pipeline,
     mmcif_parsing,
     templates,
 )
-from openfold.utils.tensor_utils import tensor_tree_map, dict_multimap
+from ligandmpnn.openfold.utils.tensor_utils import tensor_tree_map, dict_multimap
 
 
 class OpenFoldSingleDataset(torch.utils.data.Dataset):

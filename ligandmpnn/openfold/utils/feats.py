@@ -20,10 +20,10 @@ import torch
 import torch.nn as nn
 from typing import Dict
 
-from openfold.np import protein
-import openfold.np.residue_constants as rc
-from openfold.utils.rigid_utils import Rotation, Rigid
-from openfold.utils.tensor_utils import (
+from ligandmpnn.openfold.np import protein
+import ligandmpnn.openfold.np.residue_constants as rc
+from ligandmpnn.openfold.utils.rigid_utils import Rotation, Rigid
+from ligandmpnn.openfold.utils.tensor_utils import (
     batched_gather,
     one_hot,
     tree_map,

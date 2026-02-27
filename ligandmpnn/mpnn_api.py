@@ -9,8 +9,8 @@ import json
 import numpy as np
 import pandas as pd
 import os.path
-import data_utils
-from data_utils import (
+import ligandmpnn.data_utils as data_utils
+from ligandmpnn.data_utils import (
     alphabet,
     element_dict_rev,
     featurize,
@@ -22,8 +22,9 @@ from data_utils import (
     restype_str_to_int,
     write_full_PDB,
 )
-from model_utils import ProteinMPNN
-from sc_utils import Packer, pack_side_chains
+from ligandmpnn.model_utils import ProteinMPNN
+from ligandmpnn.sc_utils import Packer, pack_side_chains
+from ligandmpnn._paths import default_checkpoint
 import time
 
 
@@ -60,12 +61,11 @@ class MPNNRunner(object):
 
         # Assuming that by default the user has downloaded the weights into LigandMPNN directory
         # following the instructions in the repo.
-        SCRIPT_DIR = os.path.dirname(__file__)
-        __checkpoints = {"protein_mpnn": f"{SCRIPT_DIR}/model_params/proteinmpnn_v_48_020.pt",
-                         "ligand_mpnn": f"{SCRIPT_DIR}/model_params/ligandmpnn_v_32_020_25.pt",
-                         "per_residue_label_membrane_mpnn": f"{SCRIPT_DIR}/model_params/per_residue_label_membrane_mpnn_v_48_020.pt",
-                         "global_label_membrane_mpnn": f"{SCRIPT_DIR}/model_params/global_label_membrane_mpnn_v_48_020.pt",
-                         "soluble_mpnn": f"{SCRIPT_DIR}/model_params/solublempnn_v_48_020.pt"}
+        __checkpoints = {"protein_mpnn": default_checkpoint("proteinmpnn_v_48_020.pt"),
+                         "ligand_mpnn": default_checkpoint("ligandmpnn_v_32_020_25.pt"),
+                         "per_residue_label_membrane_mpnn": default_checkpoint("per_residue_label_membrane_mpnn_v_48_020.pt"),
+                         "global_label_membrane_mpnn": default_checkpoint("global_label_membrane_mpnn_v_48_020.pt"),
+                         "soluble_mpnn": default_checkpoint("solublempnn_v_48_020.pt")}
 
         assert model_type in __checkpoints.keys(), "invalid model_type input"
 
@@ -82,6 +82,8 @@ class MPNNRunner(object):
         print(f"Using {model_type} model from checkpoint: {self.__checkpoint_path}")
 
         self.device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
+        if verbose:
+            print(f"Using device: {self.device}")
 
         checkpoint = torch.load(self.__checkpoint_path, map_location=self.device)
 
