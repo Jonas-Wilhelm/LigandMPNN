@@ -19,11 +19,25 @@ mpnn_input.batch_size = 10
 out = mpnnrunner.run(mpnn_input)  # returns a dictionary with sequences and more
 ```
 
-### Running the code
+### Installation and command line usage
+pip install the package from GitHub. Optionally create a new conda environment for it.
 ```
-git clone https://github.com/dauparas/LigandMPNN.git
+conda create -n ligandmpnn python=3.11
+conda activate ligandmpnn
+pip install git+https://github.com/Jonas-Wilhelm/LigandMPNN.git@package-structure
+```
+
+Alternatively, clone the repository and install from the local copy.
+```
+conda create -n ligandmpnn python=3.11
+conda activate ligandmpnn
+git clone https://github.com/Jonas-Wilhelm/LigandMPNN.git@package-structure
 cd LigandMPNN
 pip install .
+```
+
+After installation download model parameters and run the model using command line interface:
+```
 ligandmpnn-fetch-weights --all
 
 ligandmpnn-run \
